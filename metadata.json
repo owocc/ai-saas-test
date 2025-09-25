@@ -1,0 +1,5 @@
+{
+  "name": "AI Calculator SaaS",
+  "description": "A modern SaaS calculator application with a sleek design, featuring standard calculation, a pricing modal, and an AI-powered chat for natural language calculations using Google Gemini.",
+  "requestFramePermissions": []
+}
