@@ -1,6 +1,7 @@
 import React from 'react';
 import { CalculatorIcon, SparklesIcon, PriceTagIcon, PaintBrushIcon } from './icons/index.tsx';
 import type { View } from '../App.tsx';
+import { useAuthContext } from '../contexts/AuthContext.tsx';
 
 const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; children: React.ReactNode }> = ({ icon, title, children }) => (
   <div className="bg-gray-800/50 border border-gray-700/80 rounded-lg p-6 text-center">
@@ -17,6 +18,16 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
+  const { isAuthenticated } = useAuthContext();
+  
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      onNavigate('calculator');
+    } else {
+      onNavigate('register');
+    }
+  };
+
   return (
     <div className="flex flex-col items-center">
       <div className="text-center my-16 max-w-3xl">
@@ -28,7 +39,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
             <button 
-              onClick={() => onNavigate('calculator')}
+              onClick={handleGetStarted}
               className="rounded-md bg-purple-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 transition-colors"
             >
               Get started

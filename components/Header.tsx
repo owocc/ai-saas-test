@@ -1,5 +1,5 @@
 import React from 'react';
-import { LogoIcon, UserCircleIcon } from './icons/index.tsx';
+import { LogoIcon, TokenIcon } from './icons/index.tsx';
 import { useAuthContext } from '../contexts/AuthContext.tsx';
 import type { View } from '../App.tsx';
 
@@ -30,7 +30,7 @@ const NavItem: React.FC<{
 };
 
 const Header: React.FC<HeaderProps> = ({ activeView, onNavigate }) => {
-  const { isAuthenticated, plan, signIn, signOut } = useAuthContext();
+  const { isAuthenticated, user, logout } = useAuthContext();
 
   return (
     <header className="py-4 flex justify-between items-center">
@@ -45,27 +45,41 @@ const Header: React.FC<HeaderProps> = ({ activeView, onNavigate }) => {
         <NavItem onClick={() => onNavigate('pricing')} isActive={activeView === 'pricing'}>Pricing</NavItem>
       </nav>
       <div>
-        {isAuthenticated ? (
+        {isAuthenticated && user ? (
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm">
-              <UserCircleIcon className="w-6 h-6 text-gray-400" />
-              <div>
-                <span className="font-medium text-white">User</span>
-                <span className="block text-xs text-gray-500">{plan} Plan</span>
+            <div className="flex items-center gap-2 text-sm bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-1.5">
+              <TokenIcon className="w-5 h-5 text-yellow-400" />
+              <div className="text-white font-semibold">{user.tokens.toLocaleString()}</div>
+            </div>
+            <div className="group relative">
+              <button className="flex items-center gap-2 text-sm p-1.5 rounded-lg hover:bg-gray-700/50">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <span className="font-medium text-white">{user.name}</span>
+                  <span className="block text-xs text-gray-500">{user.plan} Plan</span>
+                </div>
+              </button>
+              <div className="absolute top-full right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                <a onClick={() => onNavigate('dashboard')} className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/70 cursor-pointer">Dashboard</a>
+                <a onClick={logout} className="block px-4 py-2 text-sm text-red-400 hover:bg-gray-700/70 cursor-pointer">Sign Out</a>
               </div>
             </div>
-            <button
-              onClick={signOut}
-              className="px-4 py-2 text-sm font-medium bg-gray-700 text-gray-200 rounded-md hover:bg-gray-600 transition-colors">
-              Sign Out
-            </button>
           </div>
         ) : (
-          <button
-            onClick={signIn}
-            className="px-4 py-2 text-sm font-medium bg-white text-gray-900 rounded-md hover:bg-gray-200 transition-colors">
-            Sign In
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => onNavigate('login')}
+              className="px-4 py-2 text-sm font-medium text-gray-200 rounded-md hover:bg-gray-700/50 transition-colors">
+              Log In
+            </button>
+            <button
+              onClick={() => onNavigate('register')}
+              className="px-4 py-2 text-sm font-medium bg-white text-gray-900 rounded-md hover:bg-gray-200 transition-colors">
+              Register
+            </button>
+          </div>
         )}
       </div>
     </header>

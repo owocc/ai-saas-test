@@ -1,12 +1,16 @@
 import React from 'react';
 import { useCalculator } from '../hooks/useCalculator.ts';
 import { PiIcon, SquareRootIcon } from './icons/index.tsx';
+import type { View } from '../App.tsx';
 
 type Skin = 'modern' | 'noir' | 'scientific' | 'retro';
 
 interface CalculatorProps {
-  onCalculationComplete: (calculation: { expression: string; result: string }) => void;
+  onCalculationComplete: (calculation: { expression: string; result: string; cost: number; }) => void;
   skin: Skin;
+  onUpgradeRequired: () => void;
+  onInsufficientTokens: () => void;
+  insufficientTokenError: boolean;
 }
 
 const skins: Record<Skin, Record<string, string>> = {
@@ -52,8 +56,8 @@ const skins: Record<Skin, Record<string, string>> = {
   }
 };
 
-const Calculator: React.FC<CalculatorProps> = ({ onCalculationComplete, skin }) => {
-  const { displayValue, handleInput } = useCalculator({ onCalculationComplete });
+const Calculator: React.FC<CalculatorProps> = ({ onCalculationComplete, skin, onUpgradeRequired, onInsufficientTokens, insufficientTokenError }) => {
+  const { displayValue, handleInput } = useCalculator({ onCalculationComplete, onUpgradeRequired, onInsufficientTokens });
   const s = skins[skin];
 
   const baseButtons = ['C', '+/-', '%', '/', '7', '8', '9', '*', '4', '5', '6', '-', '1', '2', '3', '+', '0', '.', '='];
@@ -76,22 +80,30 @@ const Calculator: React.FC<CalculatorProps> = ({ onCalculationComplete, skin }) 
   const gridClass = skin === 'scientific' ? 'grid-cols-5' : 'grid-cols-4';
 
   return (
-    <div className={`w-full max-w-sm mx-auto rounded-2xl shadow-2xl p-4 backdrop-blur-sm border ${s.container}`}>
+    <div className={`w-full max-w-sm mx-auto rounded-2xl shadow-2xl p-4 backdrop-blur-sm border ${s.container} relative`}>
       <div className={`rounded-lg p-4 mb-4 text-right overflow-hidden ${s.display}`}>
         <p className="text-4xl font-light break-all">{displayValue}</p>
       </div>
       
-      <div className={`grid ${gridClass} gap-3 mt-4`}>
+      {insufficientTokenError && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] bg-red-800/90 border border-red-600 rounded-lg p-4 text-center text-white backdrop-blur-sm">
+          <h3 className="font-bold">Insufficient Tokens</h3>
+          <p className="text-sm text-red-200">Please recharge on your dashboard to continue.</p>
+        </div>
+      )}
+
+      <div className={`grid ${gridClass} gap-3 mt-4 ${insufficientTokenError ? 'opacity-20 pointer-events-none' : ''}`}>
         {buttons.map((btn) => {
             const isZero = btn === '0';
-            const isEquals = btn === '=';
             const doubleWidth = isZero && skin !== 'scientific';
+            const isEquals = btn === '=';
+            const equalsDoubleWidth = isEquals && skin === 'scientific';
 
             return (
               <button 
                 key={btn} 
                 onClick={() => handleInput(btn)} 
-                className={`${getButtonClasses(btn)} ${doubleWidth ? 'col-span-2' : ''} ${isEquals && skin === 'scientific' ? 'col-span-2' : ''}`}
+                className={`${getButtonClasses(btn)} ${doubleWidth ? 'col-span-2' : ''} ${equalsDoubleWidth ? 'col-span-2' : ''}`}
               >
                 {getButtonContent(btn)}
               </button>

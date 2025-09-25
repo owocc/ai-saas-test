@@ -1,14 +1,18 @@
 import React, { createContext, useContext } from 'react';
-import { useAuth, Plan, Skin } from '../hooks/useAuth.ts';
+import { useAuth } from '../hooks/useAuth.ts';
+import type { User, Plan, TokenHistoryEntry, CalculationHistoryEntry } from '../hooks/useAuth.ts';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  plan: Plan;
-  unlockedSkins: Set<Skin>;
-  signIn: () => void;
-  signOut: () => void;
+  user: User | null;
+  register: (name: string, email: string, password: string) => { success: boolean; error?: string };
+  login: (email: string, password: string) => boolean;
+  logout: () => void;
   upgradePlan: (newPlan: Plan) => void;
-  unlockSkin: (skin: Skin) => void;
+  deductTokens: (amount: number, reason: string) => boolean;
+  rechargeTokens: (amount: number) => void;
+  addCalculationToHistory: (calc: { expression: string; result: string; cost: number; }) => void;
+  clearCalculationHistory: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -26,4 +30,4 @@ export const useAuthContext = () => {
   return context;
 };
 
-export type { Plan, Skin };
+export type { User, Plan, TokenHistoryEntry, CalculationHistoryEntry };
