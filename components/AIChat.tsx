@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { getAiCalculation } from '../services/geminiService';
-import { UserIcon, SparklesIcon, SendIcon } from './icons';
+import { getAiCalculation } from '../services/geminiService.ts';
+import { UserIcon, SparklesIcon, SendIcon } from './icons/index.tsx';
 
 interface Message {
   role: 'user' | 'model';
