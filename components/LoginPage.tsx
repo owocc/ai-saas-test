@@ -35,12 +35,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
 
   return (
     <div className="max-w-md mx-auto mt-16">
-      <div className="bg-gray-800/50 border border-gray-700/80 rounded-lg p-8">
-        <h2 className="text-2xl font-bold text-white text-center mb-6">Log In</h2>
+      <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 rounded-lg p-8">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-6">Log In</h2>
         <form onSubmit={handleSubmit}>
-          {error && <p className="bg-red-900/50 text-red-300 border border-red-700 p-3 rounded-md mb-4 text-sm">{error}</p>}
+          {error && <p className="bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-700 p-3 rounded-md mb-4 text-sm">{error}</p>}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="email">Email</label>
+            <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2" htmlFor="email">Email</label>
             <input 
               type="email" 
               id="email" 
@@ -48,11 +48,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="user@example.com"
-              className="w-full bg-gray-900/70 border border-gray-700 rounded-lg py-2 px-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full bg-gray-100 dark:bg-gray-900/70 border border-gray-300 dark:border-gray-700 rounded-lg py-2 px-3 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="password">Password</label>
+            <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2" htmlFor="password">Password</label>
             <input 
               type="password" 
               id="password" 
@@ -60,7 +60,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="password123"
-              className="w-full bg-gray-900/70 border border-gray-700 rounded-lg py-2 px-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full bg-gray-100 dark:bg-gray-900/70 border border-gray-300 dark:border-gray-700 rounded-lg py-2 px-3 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
           <button type="submit" className="w-full bg-purple-600 text-white font-semibold py-2.5 rounded-lg hover:bg-purple-500 transition-colors">
@@ -70,24 +70,24 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
 
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center" aria-hidden="true">
-            <div className="w-full border-t border-gray-700" />
+            <div className="w-full border-t border-gray-300 dark:border-gray-700" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-gray-800 text-gray-500">Or</span>
+            <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">Or</span>
           </div>
         </div>
         
         <button 
           type="button" 
           onClick={handleDemoLogin}
-          className="w-full bg-gray-700 text-white font-semibold py-2.5 rounded-lg hover:bg-gray-600 transition-colors"
+          className="w-full bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white font-semibold py-2.5 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
         >
           Log in as Demo User
         </button>
 
-        <p className="text-center text-sm text-gray-400 mt-6">
+        <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6">
           Don't have an account?{' '}
-          <a onClick={() => onNavigate('register')} className="font-medium text-purple-400 hover:text-purple-300 cursor-pointer">
+          <a onClick={() => onNavigate('register')} className="font-medium text-purple-600 dark:text-purple-400 hover:text-purple-500 dark:hover:text-purple-300 cursor-pointer">
             Register here
           </a>
         </p>

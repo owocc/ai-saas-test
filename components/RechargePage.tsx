@@ -40,25 +40,25 @@ const RechargePage: React.FC<RechargePageProps> = ({ onNavigate }) => {
   return (
     <div className="w-full max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-white">Recharge Your Tokens</h2>
-          <p className="mt-3 text-lg text-gray-400">Choose a package that suits your needs and continue calculating.</p>
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white">Recharge Your Tokens</h2>
+          <p className="mt-3 text-lg text-gray-600 dark:text-gray-400">Choose a package that suits your needs and continue calculating.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {packages.map(pkg => (
             <div 
               key={pkg.amount} 
-              className={`relative border rounded-lg p-6 flex flex-col text-center transition-all transform hover:-translate-y-1 cursor-pointer ${pkg.isPopular ? 'bg-purple-600/10 border-purple-500' : 'bg-gray-800/60 border-gray-700'}`}
+              className={`relative border rounded-lg p-6 flex flex-col text-center transition-all transform hover:-translate-y-1 cursor-pointer ${pkg.isPopular ? 'bg-purple-600/10 border-purple-500' : 'bg-white dark:bg-gray-800/60 border-gray-200 dark:border-gray-700'}`}
               onClick={() => setSelectedPackage(pkg)}
             >
               {pkg.isPopular && <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">POPULAR</div>}
               <div className="flex justify-center my-4">
                 <TokenIcon className="w-12 h-12 text-yellow-400"/>
               </div>
-              <h3 className="text-3xl font-bold text-white">{pkg.amount.toLocaleString()}</h3>
-              <p className="text-gray-300 mb-4">Tokens</p>
+              <h3 className="text-3xl font-bold text-gray-900 dark:text-white">{pkg.amount.toLocaleString()}</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">Tokens</p>
               {pkg.bonus && <p className="text-sm text-green-400 font-semibold mb-4">{pkg.bonus}</p>}
               <div className="flex-grow"></div>
-              <div className="mt-auto bg-gray-700/50 text-white font-semibold py-2.5 rounded-lg">
+              <div className="mt-auto bg-gray-200 dark:bg-gray-700/50 text-gray-800 dark:text-white font-semibold py-2.5 rounded-lg">
                 {pkg.price}
               </div>
             </div>

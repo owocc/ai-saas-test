@@ -20,28 +20,28 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-white mb-8">Welcome, {user.name}!</h1>
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Welcome, {user.name}!</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="bg-gray-800/50 border border-gray-700/80 rounded-lg p-6 md:col-span-1">
-          <h2 className="text-sm font-semibold text-gray-400 mb-3">Account</h2>
-          <p className="text-base text-gray-300 mb-1">Email: {user.email}</p>
-          <p className="text-base text-gray-300 mb-4">Plan: <span className="font-semibold text-purple-400">{user.plan}</span></p>
+        <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 rounded-lg p-6 md:col-span-1">
+          <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">Account</h2>
+          <p className="text-base text-gray-700 dark:text-gray-300 mb-1">Email: {user.email}</p>
+          <p className="text-base text-gray-700 dark:text-gray-300 mb-4">Plan: <span className="font-semibold text-purple-600 dark:text-purple-400">{user.plan}</span></p>
            <button 
             onClick={() => onNavigate('calculator')}
-            className="w-full bg-gray-700 text-white font-semibold py-2.5 rounded-lg hover:bg-gray-600 transition-colors"
+            className="w-full bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white font-semibold py-2.5 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
           >
             Go to Calculator
           </button>
         </div>
 
-        <div className="bg-gray-800/50 border border-gray-700/80 rounded-lg p-6 md:col-span-2">
-            <h2 className="text-sm font-semibold text-gray-400 mb-3">Your Tokens</h2>
+        <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 rounded-lg p-6 md:col-span-2">
+            <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">Your Tokens</h2>
             <div className="flex items-center gap-4 mb-4">
               <TokenIcon className="w-10 h-10 text-yellow-400"/>
               <div>
-                <p className="text-4xl font-bold text-white">{user.tokens.toLocaleString()}</p>
-                <p className="text-gray-400 text-sm">Tokens available</p>
+                <p className="text-4xl font-bold text-gray-900 dark:text-white">{user.tokens.toLocaleString()}</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">Tokens available</p>
               </div>
             </div>
             <div className="flex gap-4">

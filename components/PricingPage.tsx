@@ -31,11 +31,11 @@ const plansData: { title: PlanType; price: string; description: string; features
 ];
 
 const Plan: React.FC<{ title: PlanType; price: string; description: string, features: string[], primary?: boolean, onChoose: () => void, isCurrent: boolean }> = ({ title, price, description, features, primary = false, onChoose, isCurrent }) => (
-  <div className={`border rounded-lg p-6 flex flex-col ${primary ? 'bg-purple-600/10 border-purple-500' : 'bg-gray-800/60 border-gray-700'}`}>
-    <h3 className={`text-lg font-semibold ${primary ? 'text-purple-300' : 'text-white'}`}>{title}</h3>
-    <p className="mt-1 text-sm text-gray-400">{description}</p>
-    <p className="mt-4 text-3xl font-bold text-white">{price}<span className="text-sm font-normal text-gray-400">/ month</span></p>
-    <ul className="mt-6 space-y-3 text-sm text-gray-300 flex-grow">
+  <div className={`border rounded-lg p-6 flex flex-col ${primary ? 'bg-purple-600/10 border-purple-500' : 'bg-white dark:bg-gray-800/60 border-gray-200 dark:border-gray-700'}`}>
+    <h3 className={`text-lg font-semibold ${primary ? 'text-purple-600 dark:text-purple-300' : 'text-gray-900 dark:text-white'}`}>{title}</h3>
+    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{description}</p>
+    <p className="mt-4 text-3xl font-bold text-gray-900 dark:text-white">{price}<span className="text-sm font-normal text-gray-500 dark:text-gray-400">/ month</span></p>
+    <ul className="mt-6 space-y-3 text-sm text-gray-600 dark:text-gray-300 flex-grow">
       {features.map(feature => (
         <li key={feature} className="flex items-start gap-2">
           <CheckIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
@@ -48,10 +48,10 @@ const Plan: React.FC<{ title: PlanType; price: string; description: string, feat
       disabled={isCurrent}
       className={`mt-8 w-full py-2.5 rounded-md font-semibold text-sm transition-colors ${
         isCurrent
-        ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+        ? 'bg-gray-300 text-gray-500 dark:bg-gray-600 dark:text-gray-400 cursor-not-allowed'
         : primary 
         ? 'bg-purple-500 text-white hover:bg-purple-400' 
-        : 'bg-gray-700 text-white hover:bg-gray-600'
+        : 'bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600'
       }`}
     >
       {isCurrent ? 'Current Plan' : 'Choose Plan'}
@@ -87,8 +87,8 @@ const PricingPage: React.FC<PricingPageProps> = ({ onPlanChosen }) => {
   return (
     <div className="w-full max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-white">Upgrade to Unlock More Power</h2>
-          <p className="mt-3 text-lg text-gray-400">Choose a plan that fits your needs. Get a <span className="text-yellow-300 font-semibold">token bonus</span> with every upgrade!</p>
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white">Upgrade to Unlock More Power</h2>
+          <p className="mt-3 text-lg text-gray-600 dark:text-gray-400">Choose a plan that fits your needs. Get a <span className="text-yellow-500 dark:text-yellow-300 font-semibold">token bonus</span> with every upgrade!</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
             {plansData.map(plan => (
