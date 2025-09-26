@@ -14,7 +14,7 @@ const NavItem: React.FC<{
   isPro?: boolean;
   children: React.ReactNode;
 }> = ({ onClick, isActive, isPro, children }) => {
-  const baseClasses = "px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5";
+  const baseClasses = "px-4 py-1.5 text-sm font-medium rounded-full transition-colors flex items-center gap-1.5";
   const activeClasses = "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white";
   const inactiveClasses = "text-gray-500 dark:text-gray-400 hover:bg-gray-200/60 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200";
 
@@ -38,7 +38,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onNavigate }) => {
         <LogoIcon className="w-8 h-8 text-black dark:text-white" />
         <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Calc AI</h1>
       </div>
-      <nav className="hidden md:flex items-center p-1 bg-white/50 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-lg">
+      <nav className="hidden md:flex items-center p-1 bg-white/50 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-full">
         <NavItem onClick={() => onNavigate('home')} isActive={activeView === 'home'}>Home</NavItem>
         <NavItem onClick={() => onNavigate('calculator')} isActive={activeView === 'calculator'} isPro>Calculator</NavItem>
         <NavItem onClick={() => onNavigate('ai-chat')} isActive={activeView === 'ai-chat'} isPro>AI Chat</NavItem>
