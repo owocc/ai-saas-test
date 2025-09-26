@@ -83,7 +83,9 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       particles = [];
-      const colors = ['#8B5CF6', '#EC4899'];
+
+      const isDark = document.documentElement.classList.contains('dark');
+      const colors = isDark ? ['#6D28D9', '#9D174D'] : ['#8B5CF6', '#EC4899'];
       const speeds = [0.2, -0.2];
 
       for (let i = 0; i < particleCount; i++) {
@@ -99,43 +101,47 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
     const animate = () => {
       time += 0.01;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const isDark = document.documentElement.classList.contains('dark');
 
       for (let i = 0; i < pointsPerStrand; i++) {
         const p1_index = i;
         const p2_index = i + pointsPerStrand;
         
-        // Find corresponding particle on the other strand for drawing rungs
         const p1 = particles[p1_index];
         const p2 = particles[p2_index];
 
         p1.update(time);
         p2.update(time);
 
-        // Draw connecting lines (rungs)
         const distance = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
         if (distance < 100) {
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
             const opacity = 1 - (distance / 100);
-            ctx.strokeStyle = `rgba(139, 92, 246, ${opacity * 0.5})`;
+            const rungColor = isDark ? `rgba(109, 40, 217, ${opacity * 0.5})` : `rgba(139, 92, 246, ${opacity * 0.5})`;
+            ctx.strokeStyle = rungColor;
             ctx.lineWidth = 1;
             ctx.stroke();
         }
       }
 
-       // Draw strands
        for (let i = 0; i < particleCount; i++) {
             ctx.beginPath();
             const startIndex = i * pointsPerStrand;
-            particles.slice(startIndex, startIndex + pointsPerStrand).sort((a,b) => a.x - b.x); // sort by x to draw line correctly
+            particles.slice(startIndex, startIndex + pointsPerStrand).sort((a,b) => a.x - b.x);
             ctx.moveTo(particles[startIndex].x, particles[startIndex].y);
             for (let j = 1; j < pointsPerStrand; j++) {
                 ctx.lineTo(particles[startIndex + j].x, particles[startIndex + j].y);
             }
             const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-            gradient.addColorStop(0, i === 0 ? 'rgba(139, 92, 246, 0.5)' : 'rgba(236, 72, 153, 0.5)');
-            gradient.addColorStop(1, i === 0 ? 'rgba(139, 92, 246, 0.1)' : 'rgba(236, 72, 153, 0.1)');
+            if (isDark) {
+              gradient.addColorStop(0, i === 0 ? 'rgba(109, 40, 217, 0.5)' : 'rgba(157, 23, 77, 0.5)');
+              gradient.addColorStop(1, i === 0 ? 'rgba(109, 40, 217, 0.1)' : 'rgba(157, 23, 77, 0.1)');
+            } else {
+              gradient.addColorStop(0, i === 0 ? 'rgba(139, 92, 246, 0.5)' : 'rgba(236, 72, 153, 0.5)');
+              gradient.addColorStop(1, i === 0 ? 'rgba(139, 92, 246, 0.1)' : 'rgba(236, 72, 153, 0.1)');
+            }
             ctx.strokeStyle = gradient;
             ctx.lineWidth = 1;
             ctx.stroke();
@@ -148,9 +154,21 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
     animate();
 
     window.addEventListener('resize', init);
+
+    const observer = new MutationObserver((mutationsList) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          init();
+        }
+      }
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+    
     return () => {
       window.removeEventListener('resize', init);
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
     };
   }, []);
   

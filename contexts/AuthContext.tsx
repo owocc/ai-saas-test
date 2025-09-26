@@ -24,29 +24,45 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const auth = useAuth();
   const [theme, setTheme] = useState<Theme>(() => {
-    // This now reads the theme from the class set by the script in index.html
-    if (typeof window !== 'undefined' && document.documentElement.classList.contains('dark')) {
-      return 'dark';
+    // Initialize state from the class set by the inline script in index.html.
+    // This ensures no hydration mismatch between a server-rendered assumption and the client reality.
+    if (typeof window !== 'undefined') {
+      return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
     }
+    // Fallback for environments without a DOM.
     return 'light';
   });
 
+  // Effect to apply the current theme class to the <html> element.
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('theme', theme);
-      const root = window.document.documentElement;
-      if (theme === 'dark') {
-        root.classList.add('dark');
-        root.classList.remove('light');
-      } else {
-        root.classList.add('light');
-        root.classList.remove('dark');
-      }
-    }
+    const root = document.documentElement;
+    root.classList.toggle('dark', theme === 'dark');
+    root.classList.toggle('light', theme !== 'dark');
   }, [theme]);
 
+  // Effect to listen for changes in the user's OS theme preference.
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    const handleChange = (e: MediaQueryListEvent) => {
+      // Only apply the OS theme if the user hasn't manually chosen a theme.
+      if (!localStorage.getItem('theme')) {
+        setTheme(e.matches ? 'dark' : 'light');
+      }
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
   const toggleTheme = () => {
-    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+    setTheme(prevTheme => {
+      const newTheme = prevTheme === 'light' ? 'dark' : 'light';
+      // When the user manually toggles, we store their preference to override the OS setting.
+      localStorage.setItem('theme', newTheme);
+      return newTheme;
+    });
   };
 
   return <AuthContext.Provider value={{ ...auth, theme, toggleTheme }}>{children}</AuthContext.Provider>;
