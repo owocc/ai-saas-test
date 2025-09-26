@@ -31,7 +31,7 @@ const plansData: { title: PlanType; price: string; description: string; features
 ];
 
 const Plan: React.FC<{ title: PlanType; price: string; description: string, features: string[], primary?: boolean, onChoose: () => void, isCurrent: boolean }> = ({ title, price, description, features, primary = false, onChoose, isCurrent }) => (
-  <div className={`border rounded-lg p-6 flex flex-col ${primary ? 'bg-purple-600/10 border-purple-500' : 'bg-white dark:bg-gray-800/60 border-gray-200 dark:border-gray-700'}`}>
+  <div className={`border rounded-lg p-6 flex flex-col ${primary ? 'bg-purple-600/10 dark:bg-purple-900/20 border-purple-500 dark:border-purple-700' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'}`}>
     <h3 className={`text-lg font-semibold ${primary ? 'text-purple-600 dark:text-purple-300' : 'text-gray-900 dark:text-white'}`}>{title}</h3>
     <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{description}</p>
     <p className="mt-4 text-3xl font-bold text-gray-900 dark:text-white">{price}<span className="text-sm font-normal text-gray-500 dark:text-gray-400">/ month</span></p>
@@ -50,7 +50,7 @@ const Plan: React.FC<{ title: PlanType; price: string; description: string, feat
         isCurrent
         ? 'bg-gray-300 text-gray-500 dark:bg-gray-600 dark:text-gray-400 cursor-not-allowed'
         : primary 
-        ? 'bg-purple-500 text-white hover:bg-purple-400' 
+        ? 'bg-purple-500 text-white hover:bg-purple-400 dark:bg-purple-600 dark:hover:bg-purple-500' 
         : 'bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600'
       }`}
     >

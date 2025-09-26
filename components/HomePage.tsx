@@ -5,7 +5,7 @@ import { useAuthContext } from '../contexts/AuthContext.tsx';
 
 const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; children: React.ReactNode }> = ({ icon, title, children }) => (
   <div className="p-[1px] bg-gradient-to-br from-gray-200 to-gray-50 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-xl group transition-all duration-500 hover:scale-105 hover:!bg-gradient-to-br hover:from-purple-600 hover:via-purple-800 hover:to-indigo-600">
-    <div className="bg-white/80 dark:bg-black/80 backdrop-blur-md rounded-[11px] p-6 text-center h-full flex flex-col items-center">
+    <div className="bg-white dark:bg-gray-900 rounded-[11px] p-6 text-center h-full flex flex-col items-center">
       <div className="mb-4 text-purple-600 dark:text-purple-400 group-hover:text-white transition-colors duration-500">
         {icon}
       </div>
@@ -164,11 +164,11 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
   return (
     <div>
-       <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10 opacity-60 dark:opacity-60"></canvas>
+       <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10 opacity-60 dark:opacity-40"></canvas>
       <div className="flex flex-col items-center">
         <div className="text-center my-16 max-w-3xl min-h-[50vh] flex flex-col justify-center">
           <h1 
-            className="text-5xl md:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 animate-fade-in-up"
+            className="text-5xl md:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 animate-fade-in-up"
             style={{...parallaxStyle(0.5)}}
           >
             The Future of Calculation is Here
@@ -209,7 +209,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               Start for free and upgrade as you grow. Our pricing plans are designed to fit the needs of everyone.
             </FeatureCard>
         </div>
-        <footer className="text-center py-16 text-gray-500 dark:text-gray-600 text-sm">
+        <footer className="text-center py-16 text-gray-500 dark:text-gray-400 text-sm">
             <p>&copy; {new Date().getFullYear()} Calc AI. All rights reserved.</p>
         </footer>
       </div>

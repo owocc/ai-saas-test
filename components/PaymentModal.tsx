@@ -33,7 +33,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 max-w-md w-full relative">
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white text-2xl font-bold">&times;</button>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-2">{title}</h2>
-        <div className="text-center bg-gray-100 dark:bg-gray-700/50 p-4 rounded-lg mb-6">
+        <div className="text-center bg-gray-100 dark:bg-gray-700 p-4 rounded-lg mb-6">
           <p className="text-lg text-gray-600 dark:text-gray-300">{description}</p>
           <p className="text-4xl font-bold text-yellow-500 dark:text-yellow-400 my-1">{itemName}</p>
           <p className="text-xl font-semibold text-gray-900 dark:text-white">{itemPrice}</p>
@@ -42,7 +42,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         <div className="space-y-4">
           <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400">Select Payment Method</h3>
           {['card', 'paypal', 'crypto'].map(method => (
-            <label key={method} className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-colors ${paymentMethod === method ? 'border-purple-500 bg-purple-500/10' : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50'}`}>
+            <label key={method} className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-colors ${paymentMethod === method ? 'border-purple-500 bg-purple-500/10 dark:bg-purple-900/20' : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'}`}>
               <input type="radio" name="payment" value={method} checked={paymentMethod === method} onChange={() => setPaymentMethod(method)} className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600 focus:ring-purple-600 ring-offset-gray-800 focus:ring-2"/>
               <span className="ml-3 text-sm font-medium text-gray-800 dark:text-white capitalize">{method === 'card' ? 'Credit Card' : method}</span>
             </label>

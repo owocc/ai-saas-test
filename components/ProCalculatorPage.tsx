@@ -26,7 +26,7 @@ const SkinSelector: React.FC<{
   const { user } = useAuthContext();
 
   return (
-    <div className="bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 rounded-lg p-4 mb-6">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-6">
       <div className="flex items-center gap-2 mb-3">
         <PaintBrushIcon className="w-5 h-5 text-purple-600 dark:text-purple-400"/>
         <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Select a Skin</h3>
@@ -120,7 +120,7 @@ const ProCalculatorPage: React.FC<ProCalculatorPageProps> = ({ onNavigate }) => 
         />
       </div>
       <div className="w-full md:w-64 lg:w-80">
-        <div className="bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 rounded-2xl p-4">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl p-4">
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Calculation History</h2>
             {isHistoryUnlocked && history.length > 0 && (
@@ -130,7 +130,7 @@ const ProCalculatorPage: React.FC<ProCalculatorPageProps> = ({ onNavigate }) => 
           {isHistoryUnlocked ? (
             <div className="h-[480px] overflow-y-auto space-y-2 pr-2 -mr-2">
               {history.length > 0 ? history.map((calc, index) => (
-                <div key={index} className="bg-gray-100 dark:bg-gray-700/50 p-2.5 rounded-md">
+                <div key={index} className="bg-gray-100 dark:bg-gray-700 p-2.5 rounded-md">
                   <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{calc.expression}</p>
                   <div className="flex justify-between items-end">
                     <p className="text-lg font-medium text-gray-900 dark:text-white">{calc.result}</p>
@@ -150,7 +150,7 @@ const ProCalculatorPage: React.FC<ProCalculatorPageProps> = ({ onNavigate }) => 
             <div className="text-center text-sm text-gray-500 py-8">
               <LockClosedIcon className="w-8 h-8 mx-auto mb-2 text-gray-600"/>
               <p className="font-medium text-gray-700 dark:text-gray-400">History is a Pro Feature</p>
-              <p className="text-xs text-gray-500 mt-1">Upgrade your plan to save and view past calculations.</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Upgrade your plan to save and view past calculations.</p>
               <button onClick={() => onNavigate('pricing')} className="mt-3 text-purple-600 dark:text-purple-400 hover:text-purple-500 dark:hover:text-purple-300 text-sm font-semibold">Upgrade Plan</button>
             </div>
           )}

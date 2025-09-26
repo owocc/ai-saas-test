@@ -16,14 +16,14 @@ interface CalculatorProps {
 const skins: Record<Skin, Record<string, string>> = {
   modern: {
     container: "bg-gray-100 dark:bg-gray-900 border-gray-200 dark:border-gray-800 shadow-xl dark:shadow-purple-900/20",
-    display: "bg-white dark:bg-black/50 text-gray-800 dark:text-white",
-    button: "bg-white dark:bg-gray-800/80 text-gray-800 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 focus:ring-purple-500",
-    operatorButton: "bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 hover:bg-purple-200/70 dark:hover:bg-purple-900",
+    display: "bg-white dark:bg-black text-gray-800 dark:text-white",
+    button: "bg-white dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 focus:ring-purple-500",
+    operatorButton: "bg-purple-100 dark:bg-purple-800 text-purple-600 dark:text-purple-200 hover:bg-purple-200/70 dark:hover:bg-purple-700",
     equalsButton: "bg-green-500 dark:bg-green-600 text-white hover:bg-green-600 dark:hover:bg-green-500",
   },
   noir: {
     container: "bg-gray-200 dark:bg-black border-gray-300 dark:border-gray-800 shadow-xl dark:shadow-gray-700/20 font-mono",
-    display: "bg-white dark:bg-gray-800/50 text-black dark:text-white",
+    display: "bg-white dark:bg-gray-800 text-black dark:text-white",
     button: "bg-white dark:bg-gray-800 text-black dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-gray-400",
     operatorButton: "bg-black dark:bg-gray-300 text-white dark:text-black hover:bg-gray-800 dark:hover:bg-white",
     equalsButton: "bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200",
@@ -38,7 +38,7 @@ const skins: Record<Skin, Record<string, string>> = {
   retro: {
     container: "bg-[#DCD5C4] dark:bg-[#3C3524] border-[#B5AE9A] dark:border-[#15120A] shadow-xl dark:shadow-black/20 font-sans",
     display: "bg-[#7A8A8C] dark:bg-[#3A4A4C] text-[#E02626] font-mono shadow-inner border-2 border-[#545F61] dark:border-[#141F21]",
-    button: "bg-[#4B4A48] dark:bg-[#2B2A28] text-white dark:text-gray-200 rounded-md shadow-md border-b-2 border-black dark:border-black active:border-b-0 active:mt-0.5 hover:bg-gray-900 dark:hover:bg-black/50",
+    button: "bg-[#4B4A48] dark:bg-[#2B2A28] text-white dark:text-gray-200 rounded-md shadow-md border-b-2 border-black dark:border-black active:border-b-0 active:mt-0.5 hover:bg-gray-900 dark:hover:bg-black",
     operatorButton: "bg-[#A63B3B] dark:bg-[#861B1B] text-white rounded-md shadow-md border-b-2 border-[#6D2727] dark:border-[#4D0707] active:border-b-0 active:mt-0.5 hover:bg-red-800 dark:hover:bg-red-900",
     equalsButton: "bg-[#3B8068] dark:bg-[#1B6048] text-white rounded-md shadow-md border-b-2 border-[#244F40] dark:border-[#042F20] active:border-b-0 active:mt-0.5 hover:bg-green-800 dark:hover:bg-green-900",
   }

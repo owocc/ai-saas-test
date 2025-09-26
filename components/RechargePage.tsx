@@ -47,7 +47,7 @@ const RechargePage: React.FC<RechargePageProps> = ({ onNavigate }) => {
           {packages.map(pkg => (
             <div 
               key={pkg.amount} 
-              className={`relative border rounded-lg p-6 flex flex-col text-center transition-all transform hover:-translate-y-1 cursor-pointer ${pkg.isPopular ? 'bg-purple-600/10 border-purple-500' : 'bg-white dark:bg-gray-800/60 border-gray-200 dark:border-gray-700'}`}
+              className={`relative border rounded-lg p-6 flex flex-col text-center transition-all transform hover:-translate-y-1 cursor-pointer ${pkg.isPopular ? 'bg-purple-600/10 dark:bg-purple-900/20 border-purple-500 dark:border-purple-700' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'}`}
               onClick={() => setSelectedPackage(pkg)}
             >
               {pkg.isPopular && <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">POPULAR</div>}
@@ -58,7 +58,7 @@ const RechargePage: React.FC<RechargePageProps> = ({ onNavigate }) => {
               <p className="text-gray-600 dark:text-gray-300 mb-4">Tokens</p>
               {pkg.bonus && <p className="text-sm text-green-400 font-semibold mb-4">{pkg.bonus}</p>}
               <div className="flex-grow"></div>
-              <div className="mt-auto bg-gray-200 dark:bg-gray-700/50 text-gray-800 dark:text-white font-semibold py-2.5 rounded-lg">
+              <div className="mt-auto bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold py-2.5 rounded-lg">
                 {pkg.price}
               </div>
             </div>

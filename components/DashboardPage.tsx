@@ -23,7 +23,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
       <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Welcome, {user.name}!</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 rounded-lg p-6 md:col-span-1">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 md:col-span-1">
           <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">Account</h2>
           <p className="text-base text-gray-700 dark:text-gray-300 mb-1">Email: {user.email}</p>
           <p className="text-base text-gray-700 dark:text-gray-300 mb-4">Plan: <span className="font-semibold text-purple-600 dark:text-purple-400">{user.plan}</span></p>
@@ -35,7 +35,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
           </button>
         </div>
 
-        <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 rounded-lg p-6 md:col-span-2">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 md:col-span-2">
             <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">Your Tokens</h2>
             <div className="flex items-center gap-4 mb-4">
               <TokenIcon className="w-10 h-10 text-yellow-400"/>

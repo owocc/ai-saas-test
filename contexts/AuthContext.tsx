@@ -24,22 +24,24 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const auth = useAuth();
   const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== 'undefined') {
-      const storedTheme = window.localStorage.getItem('theme') as Theme | null;
-      if (storedTheme) {
-        return storedTheme;
-      }
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    // This now reads the theme from the class set by the script in index.html
+    if (typeof window !== 'undefined' && document.documentElement.classList.contains('dark')) {
+      return 'dark';
     }
-    return 'dark';
+    return 'light';
   });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('theme', theme);
       const root = window.document.documentElement;
-      root.classList.remove(theme === 'light' ? 'dark' : 'light');
-      root.classList.add(theme);
+      if (theme === 'dark') {
+        root.classList.add('dark');
+        root.classList.remove('light');
+      } else {
+        root.classList.add('light');
+        root.classList.remove('dark');
+      }
     }
   }, [theme]);
 
