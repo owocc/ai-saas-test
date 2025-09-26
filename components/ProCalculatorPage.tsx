@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Calculator from './Calculator.tsx';
 import { useAuthContext } from '../contexts/AuthContext.tsx';
-import { LockClosedIcon, PaintBrushIcon, TokenIcon } from './icons/index.tsx';
+import { LockClosedIcon, PaintBrushIcon, TokenIcon, XIcon, ClockIcon } from './icons/index.tsx';
 import type { View } from '../App.tsx';
 import type { Calculation } from '../hooks/useAuth.ts';
 
@@ -96,6 +96,7 @@ const ProCalculatorPage: React.FC<ProCalculatorPageProps> = ({ onNavigate }) => 
   const [activeSkin, setActiveSkin] = useState<Skin>('modern');
   const [history, setHistory] = useState<Calculation[]>(user?.history || []);
   const [insufficientTokenError, setInsufficientTokenError] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -128,8 +129,8 @@ const ProCalculatorPage: React.FC<ProCalculatorPageProps> = ({ onNavigate }) => 
   const isHistoryUnlocked = user && user.plan !== 'Hobby';
 
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-start gap-8">
-      <div className="w-full md:w-auto md:flex-1">
+    <>
+      <div className="w-full max-w-5xl mx-auto flex justify-center">
         <Calculator 
           onCalculationComplete={handleCalculationComplete} 
           skin={activeSkin} 
@@ -138,45 +139,71 @@ const ProCalculatorPage: React.FC<ProCalculatorPageProps> = ({ onNavigate }) => 
           insufficientTokenError={insufficientTokenError}
         />
       </div>
-      <div className="w-full md:w-64 lg:w-80">
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl p-4">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Calculation History</h2>
-            {isHistoryUnlocked && history.length > 0 && (
-              <button onClick={handleClearHistory} className="text-xs text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">Clear</button>
-            )}
-          </div>
-          {isHistoryUnlocked ? (
-            <div className="h-[480px] overflow-y-auto space-y-2 pr-2 -mr-2">
-              {history.length > 0 ? history.map((calc, index) => (
-                <div key={index} className="bg-gray-100 dark:bg-gray-700 p-2.5 rounded-md">
-                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{calc.expression}</p>
-                  <div className="flex justify-between items-end">
-                    <p className="text-lg font-medium text-gray-900 dark:text-white">{calc.result}</p>
-                    <div className="flex items-center gap-1 text-yellow-400">
-                      <span className="text-xs font-bold">{calc.cost}</span>
-                      <TokenIcon className="w-3 h-3"/>
+
+      <FloatingSkinSelector activeSkin={activeSkin} setActiveSkin={setActiveSkin} onNavigate={onNavigate} />
+
+      <button
+        onClick={() => setIsHistoryOpen(!isHistoryOpen)}
+        className="fixed bottom-6 right-6 w-14 h-14 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-lg flex items-center justify-center text-purple-600 dark:text-purple-400 z-20 hover:scale-110 transition-transform"
+        aria-label="View calculation history"
+      >
+        <ClockIcon className="w-6 h-6" />
+      </button>
+
+      {/* History Popover */}
+      <div
+        className={`fixed bottom-24 right-6 w-80 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl z-20 transition-all duration-300 ease-in-out flex flex-col
+          ${isHistoryOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`
+        }
+      >
+        <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+            <div className="flex items-center gap-2">
+              <ClockIcon className="w-5 h-5 text-purple-600 dark:text-purple-400"/>
+              <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Calculation History</h2>
+            </div>
+            <div className="flex items-center gap-2">
+                {isHistoryUnlocked && history.length > 0 && (
+                <button onClick={handleClearHistory} className="text-xs text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">Clear</button>
+                )}
+                <button 
+                    onClick={() => setIsHistoryOpen(false)} 
+                    className="p-1 -m-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                    title="Close History"
+                >
+                    <XIcon className="w-5 h-5" />
+                </button>
+            </div>
+        </div>
+        
+        <div className="overflow-y-auto p-4 space-y-2 max-h-[60vh]">
+            {isHistoryUnlocked ? (
+                history.length > 0 ? history.map((calc, index) => (
+                  <div key={index} className="bg-gray-100 dark:bg-gray-700 p-2.5 rounded-md">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{calc.expression}</p>
+                    <div className="flex justify-between items-end">
+                      <p className="text-lg font-medium text-gray-900 dark:text-white">{calc.result}</p>
+                      <div className="flex items-center gap-1 text-yellow-400">
+                        <span className="text-xs font-bold">{calc.cost}</span>
+                        <TokenIcon className="w-3 h-3"/>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )) : (
-                <div className="text-center text-sm text-gray-500 py-8">
-                  <p>Your calculation history will appear here.</p>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="text-center text-sm text-gray-500 py-8">
-              <LockClosedIcon className="w-8 h-8 mx-auto mb-2 text-gray-600"/>
-              <p className="font-medium text-gray-700 dark:text-gray-400">History is a Pro Feature</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Upgrade your plan to save and view past calculations.</p>
-              <button onClick={() => onNavigate('pricing')} className="mt-3 text-purple-600 dark:text-purple-400 hover:text-purple-500 dark:hover:text-purple-300 text-sm font-semibold">Upgrade Plan</button>
-            </div>
-          )}
+                )) : (
+                  <div className="text-center text-sm text-gray-500 h-full flex items-center justify-center py-10">
+                    <p>Your calculation history will appear here.</p>
+                  </div>
+                )
+            ) : (
+              <div className="text-center text-sm text-gray-500 h-full flex flex-col items-center justify-center p-6">
+                <LockClosedIcon className="w-8 h-8 mx-auto mb-2 text-gray-600"/>
+                <p className="font-medium text-gray-700 dark:text-gray-400">History is a Pro Feature</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Upgrade your plan to save and view past calculations.</p>
+                <button onClick={() => { onNavigate('pricing'); setIsHistoryOpen(false); }} className="mt-3 text-purple-600 dark:text-purple-400 hover:text-purple-500 dark:hover:text-purple-300 text-sm font-semibold">Upgrade Plan</button>
+              </div>
+            )}
         </div>
       </div>
-      <FloatingSkinSelector activeSkin={activeSkin} setActiveSkin={setActiveSkin} onNavigate={onNavigate} />
-    </div>
+    </>
   );
 };
 
