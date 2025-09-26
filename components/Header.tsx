@@ -47,18 +47,20 @@ const Header: React.FC<HeaderProps> = ({ activeView, onNavigate }) => {
       <div>
         {isAuthenticated && user ? (
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-1.5">
-              <TokenIcon className="w-5 h-5 text-yellow-400" />
-              <div className="text-white font-semibold">{user.tokens.toLocaleString()}</div>
-            </div>
             <div className="group relative">
               <button className="flex items-center gap-2 text-sm p-1.5 rounded-lg hover:bg-gray-700/50">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white">
                   {user.name.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <span className="font-medium text-white">{user.name}</span>
-                  <span className="block text-xs text-gray-500">{user.plan} Plan</span>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-white text-left">{user.name}</span>
+                     <div className="flex items-center gap-1 text-yellow-400 bg-gray-900/50 px-1.5 py-0.5 rounded-full text-xs">
+                        <TokenIcon className="w-3 h-3"/>
+                        <span>{user.tokens.toLocaleString()}</span>
+                    </div>
+                  </div>
+                  <span className="block text-xs text-gray-500 text-left">{user.plan} Plan</span>
                 </div>
               </button>
               <div className="absolute top-full right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">

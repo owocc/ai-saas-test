@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CheckIcon } from './icons/index.tsx';
 import { useAuthContext } from '../contexts/AuthContext.tsx';
 import type { Plan as PlanType } from '../hooks/useAuth.ts';
+import PaymentModal from './PaymentModal.tsx';
 
 interface PricingPageProps {
   onPlanChosen: () => void;
 }
+
+const plansData: { title: PlanType; price: string; description: string; features: string[], primary?: boolean }[] = [
+    { 
+        title: "Hobby", 
+        price: "$0", 
+        description: "For personal use and exploration.",
+        features: ["Standard Calculator", "Basic AI Chat", "Community Support"],
+    },
+    { 
+        title: "Pro", 
+        price: "$10", 
+        description: "For professionals and power users.",
+        features: ["Pro Calculator Access", "Unlimited AI Chats", "Calculation History", "All Calculator Skins", "100,000 Token Bonus", "Priority Support"], 
+        primary: true,
+    },
+    { 
+        title: "Enterprise", 
+        price: "$25", 
+        description: "For teams and businesses.",
+        features: ["Everything in Pro", "Team Collaboration", "API Access", "Dedicated Support"],
+    }
+];
 
 const Plan: React.FC<{ title: PlanType; price: string; description: string, features: string[], primary?: boolean, onChoose: () => void, isCurrent: boolean }> = ({ title, price, description, features, primary = false, onChoose, isCurrent }) => (
   <div className={`border rounded-lg p-6 flex flex-col ${primary ? 'bg-purple-600/10 border-purple-500' : 'bg-gray-800/60 border-gray-700'}`}>
@@ -38,43 +61,62 @@ const Plan: React.FC<{ title: PlanType; price: string; description: string, feat
 
 const PricingPage: React.FC<PricingPageProps> = ({ onPlanChosen }) => {
   const { user, upgradePlan } = useAuthContext();
+  const [planToPurchase, setPlanToPurchase] = useState<PlanType | null>(null);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  
   const currentPlan = user ? user.plan : 'Hobby';
 
   const handleChoosePlan = (chosenPlan: PlanType) => {
-    upgradePlan(chosenPlan);
-    onPlanChosen();
+    setPlanToPurchase(chosenPlan);
   };
+
+  const handlePaymentSuccess = () => {
+    if (planToPurchase) {
+        upgradePlan(planToPurchase);
+        setPlanToPurchase(null); // Close modal
+        setShowSuccessMessage(true);
+        setTimeout(() => {
+            setShowSuccessMessage(false);
+            onPlanChosen(); // Navigate away
+        }, 2500);
+    }
+  };
+  
+  const selectedPlanData = plansData.find(p => p.title === planToPurchase);
 
   return (
     <div className="w-full max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-white">Upgrade to Unlock More Power</h2>
-          <p className="mt-3 text-lg text-gray-400">Choose a plan that fits your needs. Get a <span className="text-yellow-300 font-semibold">100,000 token bonus</span> when you upgrade!</p>
+          <p className="mt-3 text-lg text-gray-400">Choose a plan that fits your needs. Get a <span className="text-yellow-300 font-semibold">token bonus</span> with every upgrade!</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-          <Plan 
-            title="Hobby" 
-            price="$0" 
-            description="For personal use and exploration."
-            features={["Standard Calculator", "Basic AI Chat", "Community Support"]} 
-            onChoose={() => {}} 
-            isCurrent={currentPlan === 'Hobby'} />
-          <Plan 
-            title="Pro" 
-            price="$10" 
-            description="For professionals and power users."
-            features={["Pro Calculator Access", "Unlimited AI Chats", "Calculation History", "All Calculator Skins", "100,000 Token Bonus", "Priority Support"]} 
-            primary 
-            onChoose={() => handleChoosePlan('Pro')} 
-            isCurrent={currentPlan === 'Pro'}/>
-          <Plan 
-            title="Enterprise" 
-            price="$25" 
-            description="For teams and businesses."
-            features={["Everything in Pro", "Team Collaboration", "API Access", "Dedicated Support"]} 
-            onChoose={() => handleChoosePlan('Enterprise')} 
-            isCurrent={currentPlan === 'Enterprise'}/>
+            {plansData.map(plan => (
+                 <Plan 
+                    key={plan.title}
+                    {...plan}
+                    onChoose={() => handleChoosePlan(plan.title)} 
+                    isCurrent={currentPlan === plan.title}
+                 />
+            ))}
         </div>
+
+        {selectedPlanData && (
+          <PaymentModal 
+            title="Upgrade Your Plan"
+            description="You are upgrading to the"
+            itemName={`${selectedPlanData.title} Plan`}
+            itemPrice={`${selectedPlanData.price}/month`}
+            onClose={() => setPlanToPurchase(null)}
+            onPaymentSuccess={handlePaymentSuccess}
+          />
+        )}
+
+        {showSuccessMessage && (
+            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+                Upgrade Successful! Welcome to the {user?.plan} plan.
+            </div>
+        )}
     </div>
   );
 };

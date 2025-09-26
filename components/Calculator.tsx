@@ -1,12 +1,12 @@
 import React from 'react';
 import { useCalculator } from '../hooks/useCalculator.ts';
-import { PiIcon, SquareRootIcon } from './icons/index.tsx';
+import { PiIcon, SquareRootIcon, TokenIcon } from './icons/index.tsx';
 import type { View } from '../App.tsx';
 
 type Skin = 'modern' | 'noir' | 'scientific' | 'retro';
 
 interface CalculatorProps {
-  onCalculationComplete: (calculation: { expression: string; result: string; cost: number; }) => void;
+  onCalculationComplete: (calculation: { expression: string; result: string; cost: number }) => void;
   skin: Skin;
   onUpgradeRequired: () => void;
   onInsufficientTokens: () => void;
@@ -57,7 +57,7 @@ const skins: Record<Skin, Record<string, string>> = {
 };
 
 const Calculator: React.FC<CalculatorProps> = ({ onCalculationComplete, skin, onUpgradeRequired, onInsufficientTokens, insufficientTokenError }) => {
-  const { displayValue, handleInput } = useCalculator({ onCalculationComplete, onUpgradeRequired, onInsufficientTokens });
+  const { displayValue, handleInput, expressionPreview, potentialCost } = useCalculator({ onCalculationComplete, onUpgradeRequired, onInsufficientTokens });
   const s = skins[skin];
 
   const baseButtons = ['C', '+/-', '%', '/', '7', '8', '9', '*', '4', '5', '6', '-', '1', '2', '3', '+', '0', '.', '='];
@@ -81,18 +81,27 @@ const Calculator: React.FC<CalculatorProps> = ({ onCalculationComplete, skin, on
 
   return (
     <div className={`w-full max-w-sm mx-auto rounded-2xl shadow-2xl p-4 backdrop-blur-sm border ${s.container} relative`}>
-      <div className={`rounded-lg p-4 mb-4 text-right overflow-hidden ${s.display}`}>
+      <div className={`rounded-lg p-4 mb-4 text-right overflow-hidden ${s.display} min-h-[88px] flex flex-col justify-between`}>
+        <div className="h-6 flex justify-between items-center">
+            <p className="text-sm text-gray-400 truncate">{expressionPreview}</p>
+            {potentialCost > 0 && (
+                <div className="flex items-center gap-1 text-yellow-400 animate-fade-in">
+                    <span className="text-xs font-bold">{potentialCost}</span>
+                    <TokenIcon className="w-3 h-3"/>
+                </div>
+            )}
+        </div>
         <p className="text-4xl font-light break-all">{displayValue}</p>
       </div>
       
       {insufficientTokenError && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] bg-red-800/90 border border-red-600 rounded-lg p-4 text-center text-white backdrop-blur-sm">
+        <div className="absolute inset-4 top-[108px] bg-red-800/90 border border-red-600 rounded-lg p-4 text-center text-white backdrop-blur-sm z-10 flex flex-col items-center justify-center">
           <h3 className="font-bold">Insufficient Tokens</h3>
-          <p className="text-sm text-red-200">Please recharge on your dashboard to continue.</p>
+          <p className="text-sm text-red-200">Please recharge your tokens on the dashboard to continue calculating.</p>
         </div>
       )}
 
-      <div className={`grid ${gridClass} gap-3 mt-4 ${insufficientTokenError ? 'opacity-20 pointer-events-none' : ''}`}>
+      <div className={`grid ${gridClass} gap-3 ${insufficientTokenError ? 'opacity-20 pointer-events-none' : ''}`}>
         {buttons.map((btn) => {
             const isZero = btn === '0';
             const doubleWidth = isZero && skin !== 'scientific';

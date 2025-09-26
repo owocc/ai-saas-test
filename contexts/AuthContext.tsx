@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import { useAuth } from '../hooks/useAuth.ts';
-import type { User, Plan, TokenHistoryEntry, CalculationHistoryEntry } from '../hooks/useAuth.ts';
+import type { User, Plan, Calculation } from '../hooks/useAuth.ts';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -9,9 +9,9 @@ interface AuthContextType {
   login: (email: string, password: string) => boolean;
   logout: () => void;
   upgradePlan: (newPlan: Plan) => void;
-  deductTokens: (amount: number, reason: string) => boolean;
+  deductTokens: (amount: number) => void;
   rechargeTokens: (amount: number) => void;
-  addCalculationToHistory: (calc: { expression: string; result: string; cost: number; }) => void;
+  addCalculationToHistory: (calculation: Calculation) => void;
   clearCalculationHistory: () => void;
 }
 
@@ -30,4 +30,4 @@ export const useAuthContext = () => {
   return context;
 };
 
-export type { User, Plan, TokenHistoryEntry, CalculationHistoryEntry };
+export type { User, Plan };

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Calculator from './Calculator.tsx';
-import { CalculationHistory } from './CalculationHistory.tsx';
 import { useAuthContext } from '../contexts/AuthContext.tsx';
-import { LockClosedIcon, PaintBrushIcon } from './icons/index.tsx';
+import { LockClosedIcon, PaintBrushIcon, TokenIcon } from './icons/index.tsx';
 import type { View } from '../App.tsx';
+import type { Calculation } from '../hooks/useAuth.ts';
 
 type Skin = 'modern' | 'noir' | 'scientific' | 'retro';
 
@@ -72,25 +72,16 @@ const SkinSelector: React.FC<{
 }
 
 const ProCalculatorPage: React.FC<ProCalculatorPageProps> = ({ onNavigate }) => {
-  const { user, addCalculationToHistory, clearCalculationHistory } = useAuthContext();
+  const { user, clearCalculationHistory } = useAuthContext();
   const [activeSkin, setActiveSkin] = useState<Skin>('modern');
+  const [history, setHistory] = useState<Calculation[]>(user?.history || []);
   const [insufficientTokenError, setInsufficientTokenError] = useState(false);
 
   useEffect(() => {
-    if (insufficientTokenError) {
-      const timer = setTimeout(() => setInsufficientTokenError(false), 3000);
-      return () => clearTimeout(timer);
+    if (user) {
+      setHistory(user.history);
     }
-  }, [insufficientTokenError]);
-
-  const handleCalculationComplete = (calculation: { expression: string; result: string; cost: number; }) => {
-    setInsufficientTokenError(false);
-    addCalculationToHistory(calculation);
-  };
-
-  const handleInsufficientTokens = () => {
-    setInsufficientTokenError(true);
-  };
+  }, [user]);
 
   const handleUpgradeRequired = () => {
     if (!user) {
@@ -99,6 +90,22 @@ const ProCalculatorPage: React.FC<ProCalculatorPageProps> = ({ onNavigate }) => 
       onNavigate('pricing');
     }
   };
+  
+  const handleCalculationComplete = (calculation: Calculation) => {
+    setHistory(prev => [calculation, ...prev]);
+    setInsufficientTokenError(false);
+  };
+
+  const handleInsufficientTokens = () => {
+    setInsufficientTokenError(true);
+  };
+
+  const handleClearHistory = () => {
+    clearCalculationHistory();
+    setHistory([]);
+  };
+
+  const isHistoryUnlocked = user && user.plan !== 'Hobby';
 
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-start gap-8">
@@ -114,26 +121,38 @@ const ProCalculatorPage: React.FC<ProCalculatorPageProps> = ({ onNavigate }) => 
       </div>
       <div className="w-full md:w-64 lg:w-80">
         <div className="bg-gray-800/50 border border-gray-700/80 rounded-2xl p-4">
-          <h2 className="text-lg font-semibold text-white mb-2">Calculation History</h2>
-          {user && user.plan === 'Hobby' ? (
-             <div className="text-center text-sm text-gray-500 py-8">
-                <LockClosedIcon className="w-8 h-8 mx-auto mb-2 text-gray-600"/>
-                <p className="font-medium text-gray-400">History is a Pro Feature</p>
-                <button onClick={() => onNavigate('pricing')} className="mt-2 text-purple-400 hover:text-purple-300 text-xs font-semibold">Upgrade to Save History</button>
-             </div>
-          ) : (
-            <>
-              <CalculationHistory 
-                history={user?.calculationHistory || []} 
-                onSelect={() => {}} // Selecting from history is complex with the current hook, disabling for now.
-                onClear={clearCalculationHistory}
-              />
-              {(!user?.calculationHistory || user.calculationHistory.length === 0) && (
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="text-lg font-semibold text-white">Calculation History</h2>
+            {isHistoryUnlocked && history.length > 0 && (
+              <button onClick={handleClearHistory} className="text-xs text-gray-400 hover:text-red-400">Clear</button>
+            )}
+          </div>
+          {isHistoryUnlocked ? (
+            <div className="h-[480px] overflow-y-auto space-y-2 pr-2 -mr-2">
+              {history.length > 0 ? history.map((calc, index) => (
+                <div key={index} className="bg-gray-700/50 p-2.5 rounded-md">
+                  <p className="text-xs text-gray-400 truncate">{calc.expression}</p>
+                  <div className="flex justify-between items-end">
+                    <p className="text-lg font-medium text-white">{calc.result}</p>
+                    <div className="flex items-center gap-1 text-yellow-400">
+                      <span className="text-xs font-bold">{calc.cost}</span>
+                      <TokenIcon className="w-3 h-3"/>
+                    </div>
+                  </div>
+                </div>
+              )) : (
                 <div className="text-center text-sm text-gray-500 py-8">
-                  Your calculations will appear here.
+                  <p>Your calculation history will appear here.</p>
                 </div>
               )}
-            </>
+            </div>
+          ) : (
+            <div className="text-center text-sm text-gray-500 py-8">
+              <LockClosedIcon className="w-8 h-8 mx-auto mb-2 text-gray-600"/>
+              <p className="font-medium text-gray-400">History is a Pro Feature</p>
+              <p className="text-xs text-gray-500 mt-1">Upgrade your plan to save and view past calculations.</p>
+              <button onClick={() => onNavigate('pricing')} className="mt-3 text-purple-400 hover:text-purple-300 text-sm font-semibold">Upgrade Plan</button>
+            </div>
           )}
         </div>
       </div>
