@@ -1,4 +1,5 @@
 
+
 import React, { useState, useRef, useEffect } from 'react';
 import { getAiCalculation } from '../services/geminiService.ts';
 import { UserIcon, SparklesIcon, SendIcon } from './icons/index.tsx';
@@ -26,13 +27,17 @@ const AIChat: React.FC = () => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    const userMessage: Message = { role: 'user', text: input };
+    const currentInput = input;
+    const userMessage: Message = { role: 'user', text: currentInput };
+    
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
     try {
-      const aiResponse = await getAiCalculation(input);
+      // Pass the current message history to the AI for context.
+      // The `messages` variable here captures the state *before* the new user message was added, which is the correct history.
+      const aiResponse = await getAiCalculation(currentInput, messages);
       const modelMessage: Message = { role: 'model', text: aiResponse };
       setMessages(prev => [...prev, modelMessage]);
     } catch (error) {
